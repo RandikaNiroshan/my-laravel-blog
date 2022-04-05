@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\BlogPostController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,8 +15,14 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\BlogPostController::class, 'index'])->name('blog.index');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::resource('comment', CommentController::class);
+Route::resource('blog', BlogPostController::class);
+Route::resource('user', UserController::class)->only(['index', 'show']);
