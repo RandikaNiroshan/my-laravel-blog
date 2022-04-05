@@ -23,6 +23,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('comment', CommentController::class);
+Route::resource('post.comments', CommentController::class);
 Route::resource('blog', BlogPostController::class);
 Route::resource('user', UserController::class)->only(['index', 'show']);

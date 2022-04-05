@@ -29,7 +29,7 @@
                             <label for="content" class="col-md-4 col-form-label text-md-end">Content</label>
 
                             <div class="col-md-6">
-                                <textarea id="content" type="content" class="form-control @error('content') is-invalid @enderror" name="content" required>
+                                <textarea id="content" rows="3" type="text" class="form-control @error('content') is-invalid @enderror" name="content" required>
                                     {{ old('content') }}
                                 </textarea>
 

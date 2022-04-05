@@ -32,11 +32,12 @@ class BlogPostController extends Controller
         $blog = BlogPost::make($request->validated());
         $blog->user_id = Auth::user()->id;
         $blog->save();
-        Return redirect('blog.blog');
+        Return redirect(route('blog.index'));
     }
 
     public function show($id)
     {
+        // $post = BlogPost::with('comments', 'user')->findOrFail($id);
         $post = BlogPost::with('comments', 'user')->findOrFail($id);
         return view('blog.post', compact('post'));
     }
