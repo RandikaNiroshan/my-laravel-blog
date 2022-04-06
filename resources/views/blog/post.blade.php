@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title'){{ $post->title }} @endsection
+
 @section('content')
     @isset($post)
         <div class="container p-3">
@@ -81,7 +83,7 @@
                     <div class="ms-2 me-auto">
                         {{ $comment->content }}
                         <br />
-                        <small>{{ $comment->created_at->diffForHumans() }} by</small>
+                        <small class="text-muted">{{ $comment->created_at->diffForHumans() }} by</small>
                         <a href="{{ route('user.show', ['user' => $comment->user->id]) }}">
                             <small> {{ $comment->user->name }}
                                 @if ($comment->user->id == $post->user->id)
@@ -98,6 +100,7 @@
                                             action="{{ route('blog.comments.destroy', ['comment' => $comment->id, 'blog' => $post ->id]) }}">
                                             @csrf
                                             @method('DELETE')
+                                            
                                             <input type="submit" value="Delete" class="btn btn-danger" />
                                         </form>
                                     </div>

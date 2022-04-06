@@ -43,7 +43,7 @@ class CommentController extends Controller
             'content' => $request->input('content'),
             'user_id' => Auth::user()->id,
         ]);
-        return back();
+        return back()->withStatus('Comment posted successfully');
     }
 
     /**
@@ -92,6 +92,6 @@ class CommentController extends Controller
         $this->authorize($comment);
 
         $comment->delete();
-        Return back();
+        Return back()->withStatus('Comment deleted successfully');
     }
 }

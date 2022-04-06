@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,4 @@ Auth::routes();
 
 Route::resource('blog.comments', CommentController::class)->middleware('auth')->only('create', 'store', 'destroy');
 Route::resource('blog', BlogPostController::class);
-Route::resource('user', UserController::class)->only(['index', 'show']);
+Route::resource('user', UserController::class)->only('show');
