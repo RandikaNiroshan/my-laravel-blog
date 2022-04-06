@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('auth')
+            ->only(['create', 'store', 'edit', 'update', 'destroy']);
+    }
+
     public function index()
     {
         //
@@ -36,9 +37,9 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BlogPost $post, CommentRequest $request)
+    public function store(BlogPost $blog, CommentRequest $request)
     {
-        $post->comments()->create([
+        $blog->comments()->create([
             'content' => $request->input('content'),
             'user_id' => Auth::user()->id,
         ]);
@@ -85,8 +86,12 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($blog, $comment)
     {
-        //
+        $comment = Comment::findOrFail($comment);
+        $this->authorize($comment);
+
+        $comment->delete();
+        Return back();
     }
 }

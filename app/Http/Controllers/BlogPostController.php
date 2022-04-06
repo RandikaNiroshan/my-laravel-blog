@@ -24,7 +24,7 @@ class BlogPostController extends Controller
 
     public function create()
     {
-        return view('blog.addblog');
+        return view('blog.add');
     }
 
     public function store(BlogPostRequest $request)
@@ -37,22 +37,31 @@ class BlogPostController extends Controller
 
     public function show($id)
     {
-        // $post = BlogPost::with('comments', 'user')->findOrFail($id);
         $post = BlogPost::with('comments', 'user')->findOrFail($id);
         return view('blog.post', compact('post'));
     }
 
     public function edit($id)
     {
+        $blog = BlogPost::findOrFail($id);
+        return view('blog.edit', compact('blog'));
     }
 
-    public function update(Request $request, $id)
+    public function update(BlogPostRequest $request, $id)
     {
-
+        $blog = BlogPost::findOrFail($id);
+        
+        $validatedData = $request->validated();
+        $blog->update($validatedData);
+        Return redirect(route('blog.show', ['blog' => $id]));
     }
 
     public function destroy($id)
     {
+        $blog = BlogPost::findOrFail($id);
+        $this->authorize($blog);
 
+        $blog->delete();
+        Return redirect(route('blog.index'));
     }
 }

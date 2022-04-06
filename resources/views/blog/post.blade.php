@@ -17,26 +17,38 @@
                         </a>
                     </p>
                 </div>
+                @auth
+                    @if ($post->user->id == Auth::user()->id)
+                        <div class="row mb-3 ps-3">
+                            <div>
+                                <form method="POST" class="fm-inline"
+                                    action="{{ route('blog.destroy', ['blog' => $post->id]) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <a href="{{ route('blog.edit', ['blog' => $post->id]) }}" class="btn btn-primary me-1">
+                                        Edit
+                                    </a>
+                                    <input type="submit" value="Delete" class="btn btn-danger" />
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+                @endauth
             </div>
         </div>
     @endisset
     <div class="container pt-3 pb-3">
         <h5 class="card-title mb-3">Comments ({{ $post->comments->count() }})</h5>
-
-
-
         <div class="card-body">
             @auth
-                <form method="POST" action="{{ route('post.comments.store', ['post' => $post]) }}">
+                <form method="POST" action="{{ route('blog.comments.store', ['blog' => $post->id]) }}">
                     @csrf
                     <div class="row mb-3">
                         <label for="content" class="col-form-label text-md-start">Type your comment here</label>
 
                         <div>
                             <textarea id="content" rows="3" type="text" class="form-control @error('content') is-invalid @enderror" name="content"
-                                required>
-                        {{ old('content') }}
-                    </textarea>
+                                required>{{ old('content') }}</textarea>
 
                             @error('content')
                                 <span class="invalid-feedback" role="alert">
@@ -61,14 +73,37 @@
 
         <ul class="list-group">
             @forelse ($post->comments as $comment)
-                <li class="list-group-item d-flex justify-content-between align-items-start mb-2">
+                <li
+                    class="list-group-item d-flex justify-content-between align-items-start mb-2 
+                    @auth
+                        {{ $comment->user->id == Auth::user()->id ? 'list-group-item-info' : '' }}
+                    @endauth ">
                     <div class="ms-2 me-auto">
                         {{ $comment->content }}
                         <br />
                         <small>{{ $comment->created_at->diffForHumans() }} by</small>
                         <a href="{{ route('user.show', ['user' => $comment->user->id]) }}">
-                            <small> {{ $comment->user->name }}</small>
+                            <small> {{ $comment->user->name }}
+                                @if ($comment->user->id == $post->user->id)
+                                    <span class="badge bg-secondary">Author</span>
+                                @endif
+                            </small>
                         </a>
+
+                        @auth
+                            @if ($comment->user->id == Auth::user()->id)
+                                <div class="row mb-1 ps-2 mt-2">
+                                    <div>
+                                        <form method="POST" class="fm-inline"
+                                            action="{{ route('blog.comments.destroy', ['comment' => $comment->id, 'blog' => $post ->id]) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="submit" value="Delete" class="btn btn-danger" />
+                                        </form>
+                                    </div>
+                                </div>
+                            @endif
+                        @endauth
                     </div>
                 </li>
             @empty

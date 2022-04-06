@@ -17,12 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/', [App\Http\Controllers\BlogPostController::class, 'index'])->name('blog.index');
+Route::get('/', [BlogPostController::class, 'index'])->name('blog.index');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::resource('post.comments', CommentController::class);
+Route::resource('blog.comments', CommentController::class)->middleware('auth')->only('create', 'store', 'destroy');
 Route::resource('blog', BlogPostController::class);
 Route::resource('user', UserController::class)->only(['index', 'show']);

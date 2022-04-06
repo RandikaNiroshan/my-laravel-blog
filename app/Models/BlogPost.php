@@ -14,7 +14,7 @@ class BlogPost extends Model
     protected $fillable = ['title', 'content', 'user_id'];
 
     public function comments(){
-        return $this-> hasMany('App\Models\Comment')->latest();
+        return $this-> hasMany('App\Models\Comment')->with('user')->latest();
     }
 
     public function user(){

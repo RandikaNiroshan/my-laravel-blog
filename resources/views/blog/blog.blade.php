@@ -5,7 +5,10 @@
         <div class="container p-3">
             <div class="list-group">
                 @foreach ($posts as $post)
-                    <div class="list-group-item list-group-item-action mb-2">
+                    <div class="list-group-item list-group-item-action mb-2 
+                    @auth
+                        {{ ($post->user->id == Auth::user()->id) ? 'list-group-item-info' : '' }}
+                    @endauth ">
                         <div class="d-flex w-100 justify-content-between">
                             <a href="{{ route('blog.show', ['blog' => $post->id]) }}">
                                 <h5 class="text-primary fw-bold mb-1">{{ $post->title }}</h5>
